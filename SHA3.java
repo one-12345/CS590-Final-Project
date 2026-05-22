@@ -36,7 +36,7 @@ public class SHA3 {
             return message + padding;
         }
     }
-    public static void absorb (String message, int b, int d, int c, int r) {
+    public static String absorb (String message, int b, int c, int r) {
         // split the message into n r-bit blocks
         int n = message.length() / r;
         String[] blocks = new String[n];
@@ -63,6 +63,26 @@ public class SHA3 {
             state = Integer.toBinaryString(newStateInt);
         }
         state = keccakf(state); // TODO: implement keccakf
+        return state;
+    }
+    public static String squeeze (String state, int d, int r) {
+        // initialize an empty string Z (will be the output hash)
+        // while Z is fewer than d bits long:
+        // (1) append the first r bits of the state to Z
+        // (2) apply the permutation function keccakf to the state to yield a new state
+        String Z = "";
+        while (true) {
+            Z = Z + state.substring(0, r);
+            if (Z.length() < d) {
+                state = keccakf(state);
+            }
+            else {
+                break;
+            }
+        }
+        // truncate Z to d bits and return it as the output hash
+        Z = Z.substring(0, d);
+        return Z;
     }
     public static void main (String[] args) {
         String filename = args[0]; // file should contain a bit string on a single line
@@ -75,7 +95,8 @@ public class SHA3 {
         int r = b - c; // rate (the number of bits of the state that are absorbed from the input per round)
 
         message = pad(message, r);
-
+        String state = absorb(message, b, c, r);
+        String hash = squeeze(state, d, r);
         scan.close();
     }
 }
