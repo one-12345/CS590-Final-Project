@@ -2,10 +2,26 @@ import java.util.*;
 import java.io.*;
 
 public class SHA3 {
+    public static Integer [][][] theta (Integer [][][] stateArray) {
+
+    }
+    public static Integer [][][] rho (Integer [][][] stateArray) {
+
+    }
+    public static Integer [][][] pi (Integer [][][] stateArray) {
+
+    }
+    public static Integer [][][] chi (Integer [][][] stateArray) {
+
+    }
+    public static Integer [][][] iota (Integer [][][] stateArray, int i) {
+        
+    }
     public static String keccakf (String state, int w) {
         // convert the state string into a 5 x 5 x w array of bits
         // stateArray[i][j][k] is bit number (5i + j)w + k of the state
-        int [][][] stateArray = new int[5][5][w];
+        int l = (int) (Math.log(w) / Math.log(2)); // number of bits needed to represent w
+        Integer [][][] stateArray = new Integer[5][5][w];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
@@ -14,11 +30,13 @@ public class SHA3 {
                 }
             }
         }
-        // theta
-        // rho
-        // pi
-        // chi
-        // iota
+        for (int i = 0; i < 12 + 2 * l; i++) {
+            stateArray = theta(stateArray);
+            stateArray = rho(stateArray); // TODO: implement rho
+            stateArray = pi(stateArray); // TODO: implement pi
+            stateArray = chi(stateArray); // TODO: implement chi
+            stateArray = iota(stateArray, i); // TODO: implement iota
+        }
         return state;
     }
     public static String pad (String message, int r) {
