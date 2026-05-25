@@ -9,7 +9,15 @@ public class SHA3 {
 
     }
     public static Integer [][][] pi (Integer [][][] stateArray) {
-
+        Integer [][][] newState = new Integer[5][5][stateArray[0][0].length];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < stateArray[0][0].length; k++) {
+                    newState[(3 * i + 2 * j) % 5][i][k] = stateArray[i][j][k];
+                }  
+            }
+        }
+        return newState;
     }
     public static Integer [][][] chi (Integer [][][] stateArray) {
 
