@@ -10,8 +10,8 @@ public class SHA3 {
                     int parity1 = 0;
                     int parity2 = 0;
                     for (int m = 0; m < 5; m++) {
-                        parity1 = (parity1 + stateArray[m][(j + 4) % 5][k]) % 2;
-                        parity2 = (parity2 + stateArray[m][(j + 1) % 5][(k + w - 1) % w]) % 2;
+                        parity1 = (parity1 + stateArray[m][Math.floorMod(j - 1, 5)][k]) % 2;
+                        parity2 = (parity2 + stateArray[m][Math.floorMod(j + 1, 5)][Math.floorMod(k - 1, w)]) % 2;
                     }
                     stateArray[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
                 }
@@ -20,7 +20,23 @@ public class SHA3 {
         return stateArray;
     }
     public static Integer [][][] rho (Integer [][][] stateArray) {
-
+        int w = stateArray[0][0].length; // word size
+        // t = 0 is handled separately
+        int i = 0;
+        int j = 1;
+        for (int k = 0; k < w; k++) {
+            stateArray[i][j][k] = stateArray[i][j][Math.floorMod(k - (1 * 2) / 2, w)];
+        }
+        for (int t = 1; t < 24; t++) {
+            int newI = Math.floorMod((3 * newI) + (2 * newJ), 5);
+            int newJ = newI;
+            for (int k = 0; k < w; k++) {
+                stateArray[newI][newJ][k] = stateArray[i][j][Math.floorMod(k - (t + 1) * (t + 2) / 2, w)];
+            }
+            i = newI;
+            j = newJ;
+        }
+        return stateArray;
     }
     public static Integer [][][] pi (Integer [][][] stateArray) {
         Integer [][][] newState = new Integer[5][5][stateArray[0][0].length];
@@ -48,7 +64,7 @@ public class SHA3 {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
                     int index = (5 * i + j) * w + k;
-                    stateArray[i][j][k] = Integer.parseInt(state.charAt(index) + "");
+                    stateArray[i][j][k] = Integer.parseInt(state.charAt(index) + ""); // TODO: make little-endian
                 }
             }
         }
