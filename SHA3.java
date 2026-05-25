@@ -3,7 +3,21 @@ import java.io.*;
 
 public class SHA3 {
     public static Integer [][][] theta (Integer [][][] stateArray) {
-
+        int w = stateArray[0][0].length; // word size
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < w; k++) {
+                    int parity1 = 0;
+                    int parity2 = 0;
+                    for (int m = 0; m < 5; m++) {
+                        parity1 = (parity1 + stateArray[m][(j + 4) % 5][k]) % 2;
+                        parity2 = (parity2 + stateArray[m][(j + 1) % 5][(k + w - 1) % w]) % 2;
+                    }
+                    stateArray[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
+                }
+            }
+        }
+        return stateArray;
     }
     public static Integer [][][] rho (Integer [][][] stateArray) {
 
@@ -32,10 +46,10 @@ public class SHA3 {
         }
         for (int i = 0; i < 12 + 2 * l; i++) {
             stateArray = theta(stateArray);
-            stateArray = rho(stateArray); // TODO: implement rho
-            stateArray = pi(stateArray); // TODO: implement pi
-            stateArray = chi(stateArray); // TODO: implement chi
-            stateArray = iota(stateArray, i); // TODO: implement iota
+            stateArray = rho(stateArray);
+            stateArray = pi(stateArray);
+            stateArray = chi(stateArray);
+            stateArray = iota(stateArray, i);
         }
         return state;
     }
