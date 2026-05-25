@@ -2,7 +2,18 @@ import java.util.*;
 import java.io.*;
 
 public class SHA3 {
-    public static String keccakf (String state) {
+    public static String keccakf (String state, int w) {
+        // convert the state string into a 5 x 5 x w array of bits
+        // stateArray[i][j][k] is bit number (5i + j)w + k of the state
+        int [][][] stateArray = new int[5][5][w];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < w; k++) {
+                    int index = (5 * i + j) * w + k;
+                    stateArray[i][j][k] = Integer.parseInt(state.charAt(index) + "");
+                }
+            }
+        }
         // theta
         // rho
         // pi
@@ -90,6 +101,7 @@ public class SHA3 {
         String message = scan.nextLine(); // a bit string to be hashed
 
         int b = 1600; // state size (in standard SHA-3, the state is a 1600-bit array composed of a 5x5 grid of 64-bit words)
+        int w = b / 25; // word size (the number of bits in each of the 25 words in the state; in standard SHA-3, w = 64)
         int d = 256; // digest length (the fixed length of the output hash in bits)
         int c = d * 2; // capacity (the number of bits of the state that are not directly affected by the input, this determines the security level)
         int r = b - c; // rate (the number of bits of the state that are absorbed from the input per round)
