@@ -166,5 +166,11 @@ public class SHA3 {
         String state = absorb(message, b, c, r);
         String hash = squeeze(state, d, r);
         scan.close();
+
+        // for testing:
+        // the SHA3-256 hash of an empty string is: a7ffc6f8bf1ed766 51c14756a061d662 f580ff4de43b49fa 82d80a4b80f8434a
+        // the SHA3-256 hash of "abc" is: 3a985da74fe225b2 045c172d6bd390bd 855f086e3e9d525b 46bfe24511431532
+        // the SHA3-256 hash of "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq" is: 41c0dba2a9d62408 49100376a8235e2c 82e1b9998a999e21 db32dd97496d3376
+        // the SHA3-256 hash of "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu" is: 916f6061fe879741 ca6469b43971dfdb 28b1a32dc36cb325 4e812be27aad1d18
     }
 }
