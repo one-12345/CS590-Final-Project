@@ -59,7 +59,32 @@ public class SHA3 {
             }
     }
     public static Integer [][][] iota (Integer [][][] stateArray, int i) {
-        
+        // round constants for Keccak-f[1600]
+        long[] RC = {
+            0x0000000000000001L, 0x0000000000008082L,
+            0x800000000000808AL, 0x8000000080008000L,
+            0x000000000000808BL, 0x0000000080000001L,
+            0x8000000080008081L, 0x8000000000008009L,
+            0x000000000000008AL, 0x0000000000000088L,
+            0x0000000080008009L, 0x000000008000000AL,
+            0x000000008000808BL, 0x800000000000008BL,
+            0x8000000000008089L, 0x8000000000008003L,
+            0x8000000000008002L, 0x8000000000000080L,
+            0x000000000000800AL, 0x800000008000000AL,
+            0x8000000080008081L, 0x8000000000008080L,
+            0x0000000080000001L, 0x8000000080008008L
+        }; 
+
+        int w = stateArray[0][0].length; 
+        long rc = RC[i]; 
+
+        for (int k = 0; k < w; k++) {
+            int bit = (int)((rc >> k) & 1L);
+            stateArray[0][0][k] ^= bit;
+        } 
+
+        return stateArray;
+
     }
     public static String keccakf (String state, int w) {
         // convert the state string into a 5 x 5 x w array of bits
