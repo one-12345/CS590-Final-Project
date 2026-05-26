@@ -50,7 +50,13 @@ public class SHA3 {
         return newState;
     }
     public static Integer [][][] chi (Integer [][][] stateArray) {
-
+        int w = stateArray[0][0].length; // word size
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < w; k++) {
+                    stateArray[i][j][k] = stateArray[i][j][k] ^ (~stateArray[i][Math.floorMod(j + 1, 5)][k] & stateArray[i][Math.floorMod(j + 2, 5)][k]);
+                }
+            }
     }
     public static Integer [][][] iota (Integer [][][] stateArray, int i) {
         
