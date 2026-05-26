@@ -97,7 +97,7 @@ public class SHA3 {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
                     int index = (5 * i + j) * w + k;
-                    stateArray[i][j][k] = Integer.parseInt(state.charAt(index) + ""); // TODO: make little-endian
+                    stateArray[i][j][k] = Integer.parseInt(state.charAt(state.length() - 1 - index) + "");
                 }
             }
         }
