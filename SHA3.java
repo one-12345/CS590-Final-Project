@@ -165,7 +165,10 @@ public class SHA3 {
         message = pad(message, r);
         String state = absorb(message, b, c, r);
         String hash = squeeze(state, d, r);
-        scan.close();
+
+        FileWriter writer = new FileWriter("output.txt");
+        writer.write(hash);
+        writer.close();
 
         // for testing:
         // the SHA3-256 hash of an empty string is: a7ffc6f8bf1ed766 51c14756a061d662 f580ff4de43b49fa 82d80a4b80f8434a
