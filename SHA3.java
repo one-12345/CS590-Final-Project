@@ -57,6 +57,8 @@ public class SHA3 {
                     stateArray[i][j][k] = stateArray[i][j][k] ^ (~stateArray[i][Math.floorMod(j + 1, 5)][k] & stateArray[i][Math.floorMod(j + 2, 5)][k]);
                 }
             }
+        }
+        return stateArray;
     }
     public static Integer [][][] iota (Integer [][][] stateArray, int i) {
         
