@@ -187,7 +187,10 @@ public class SHA3 {
     public static void main (String[] args) throws IOException {
         String filename = args[0]; // file should contain a bit string on a single line
         Scanner scan = new Scanner(new FileReader(filename));
-        String message = scan.nextLine(); // a bit string to be hashed
+        String message = "";
+        if (scan.hasNextLine()) {
+            message = scan.nextLine(); // a bit string to be hashed
+        }
 
         int b = 1600; // state size (in standard SHA-3, the state is a 1600-bit array composed of a 5x5 grid of 64-bit words)
         int w = b / 25; // word size (the number of bits in each of the 25 words in the state; in standard SHA-3, w = 64)
