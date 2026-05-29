@@ -3,6 +3,29 @@ import java.io.*;
 import java.math.BigInteger;
 
 public class SHA3 {
+    public static String toHex(String binary) {
+        String hex = "";
+        while (binary.length() % 4 != 0) {
+            binary = "0" + binary;
+        }
+        for (int i = 0; i < binary.length(); i += 4) {
+            String fourBits = binary.substring(i, i + 4);
+            int decimalValue = Integer.parseInt(fourBits, 2);
+            hex = hex + Integer.toHexString(decimalValue);
+        }
+        return hex;
+    }
+    public static String toString(Integer [][][] arr) {
+        String str = "";
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < arr[0][0].length; k++) {
+                    str = arr[i][j][k] + str;
+                }
+            }
+        }
+        return str;
+    }
     public static Integer [][][] theta (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
         for (int i = 0; i < 5; i++) {
@@ -22,22 +45,25 @@ public class SHA3 {
     }
     public static Integer [][][] rho (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
+        Integer[][][] newState = new Integer[5][5][w]; 
         // t = 0 is handled separately
         int i = 0;
         int j = 1;
         for (int k = 0; k < w; k++) {
-            stateArray[i][j][k] = stateArray[i][j][Math.floorMod(k - (1 * 2) / 2, w)];
+            newState[i][j][k] = stateArray[i][j][Math.floorMod(k - (1 * 2) / 2, w)];
         }
+        stateArray = newState;
         for (int t = 1; t < 24; t++) {
             int newI = Math.floorMod((3 * i) + (2 * j), 5);
             int newJ = i;
             for (int k = 0; k < w; k++) {
-                stateArray[newI][newJ][k] = stateArray[i][j][Math.floorMod(k - (t + 1) * (t + 2) / 2, w)];
+                newState[newI][newJ][k] = stateArray[i][j][Math.floorMod(k - (t + 1) * (t + 2) / 2, w)];
             }
+            stateArray = newState;
             i = newI;
             j = newJ;
         }
-        return stateArray;
+        return newState;
     }
     public static Integer [][][] pi (Integer [][][] stateArray) {
         Integer [][][] newState = new Integer[5][5][stateArray[0][0].length];
@@ -84,7 +110,7 @@ public class SHA3 {
         for (int k = 0; k < w; k++) {
             int bit = (int)((rc >> k) & 1L);
             stateArray[0][0][k] ^= bit;
-        } 
+        }
 
         return stateArray;
 
@@ -109,31 +135,25 @@ public class SHA3 {
             stateArray = chi(stateArray);
             stateArray = iota(stateArray, i);
         }
-        String newState = "";
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                for (int k = 0; k < w; k++) {
-                    newState = stateArray[i][j][k] + newState;
-                }
-            }
-        }
-        return newState;
+        return toString(stateArray);
     }
     public static String pad (String message, int r) {
         // pad the message with 100...001 until the length is a multiple of r
-        if (message.length() == 0) {
-            String padding = "1";
-            for (int i = 1; i < r - 2; i++) {
-                padding = padding + "0";
+        if (message.length() % r == 0) {
+            message = message + "1";
+            for (int i = 1; i < r - 1; i++) {
+                message = message + "0";
             }
-            padding = padding + "1";
-            return padding;
-        }
-        else if (message.length() % r == 0) {
+            message = message + "1";
             return message;
         }
         else if (message.length() % r == r - 1) {
-            return message + "1";
+            message = message + "1";
+            for (int i = 0; i < r - 1; i++) {
+                message = message + "0";
+            }
+            message = message + "1";
+            return message;
         }
         else {
             int paddingLength = r - (message.length() % r);
@@ -166,12 +186,18 @@ public class SHA3 {
             for (int j = 0; j < c; j++) {
                 block = block + "0";
             }
-            int blockInt = Integer.parseInt(block, 2);
-            int stateInt = Integer.parseInt(state, 2);
-            int newStateInt = blockInt ^ stateInt;
-            state = Integer.toBinaryString(newStateInt);
+
+            for (int j = 0; j < b; j++) {
+                if (block.charAt(j) == state.charAt(j)) {
+                    state = state.substring(0, j) + "0" + state.substring(j + 1);
+                }
+                else {
+                    state = state.substring(0, j) + "1" + state.substring(j + 1);
+                }
+            }
+            state = keccakf(state, w);
         }
-        state = keccakf(state, w); // TODO: implement keccakf
+
         return state;
     }
     public static String squeeze (String state, int d, int r, int w) {
@@ -193,6 +219,7 @@ public class SHA3 {
         Z = Z.substring(0, d);
         return Z;
     }
+    
     public static void main (String[] args) throws IOException {
         String filename = args[0]; // file should contain a bit string on a single line
         Scanner scan = new Scanner(new FileReader(filename));
@@ -215,7 +242,7 @@ public class SHA3 {
         // String hashHex = decimalString.toString(16);
 
         FileWriter writer = new FileWriter("output.txt");
-        writer.write(hashBinary);
+        writer.write(toHex(hashBinary));
         writer.close();
 
         // for testing:
