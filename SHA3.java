@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.math.BigInteger;
 
 public class SHA3 {
     public static Integer [][][] theta (Integer [][][] stateArray) {
@@ -108,7 +109,15 @@ public class SHA3 {
             stateArray = chi(stateArray);
             stateArray = iota(stateArray, i);
         }
-        return state;
+        String newState = "";
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < w; k++) {
+                    newState = stateArray[i][j][k] + newState;
+                }
+            }
+        }
+        return newState;
     }
     public static String pad (String message, int r) {
         // pad the message with 100...001 until the length is a multiple of r
@@ -200,10 +209,13 @@ public class SHA3 {
 
         message = pad(message, r);
         String state = absorb(message, b, c, r, w);
-        String hash = squeeze(state, d, r, w);
+        String hashBinary = squeeze(state, d, r, w);
+
+        // BigInteger decimalString = new BigInteger(hashBinary, 2);
+        // String hashHex = decimalString.toString(16);
 
         FileWriter writer = new FileWriter("output.txt");
-        writer.write(hash);
+        writer.write(hashBinary);
         writer.close();
 
         // for testing:
