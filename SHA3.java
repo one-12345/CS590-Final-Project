@@ -80,28 +80,48 @@ public class SHA3 {
         }
         return newState;
     }
+    // public static Integer [][][] rho (Integer [][][] stateArray) {
+    //     int w = stateArray[0][0].length; // word size
+    //     Integer[][][] newState = new Integer[5][5][w]; 
+    //     // t = 0 is handled separately
+    //     int i = 0;
+    //     int j = 1;
+    //     for (int k = 0; k < w; k++) {
+    //         newState[0][0][k] = stateArray[0][0][k];
+    //         newState[i][j][k] = stateArray[i][j][Math.floorMod(k - (1 * 2) / 2, w)];
+    //     }
+        
+    //     for (int t = 1; t < 24; t++) {
+    //         int newI = Math.floorMod((3 * i) + (2 * j), 5);
+    //         int newJ = i;
+    //         i = newI;
+    //         j = newJ;
+    
+    //         for (int k = 0; k < w; k++) {
+    //             newState[i][j][k] = stateArray[i][j][Math.floorMod(k - ((t + 1) * (t + 2) / 2), w)];
+    //         }
+    //     }
+    
+    //     return newState;
+    // }
     public static Integer [][][] rho (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
         Integer[][][] newState = new Integer[5][5][w]; 
-        // t = 0 is handled separately
-        int i = 0;
-        int j = 1;
-        for (int k = 0; k < w; k++) {
-            newState[0][0][k] = stateArray[0][0][k];
-            newState[i][j][k] = stateArray[i][j][Math.floorMod(k - (1 * 2) / 2, w)];
-        }
-        
-        for (int t = 1; t < 24; t++) {
-            int newI = Math.floorMod((3 * i) + (2 * j), 5);
-            int newJ = i;
-            i = newI;
-            j = newJ;
-    
-            for (int k = 0; k < w; k++) {
-                newState[i][j][k] = stateArray[i][j][Math.floorMod(k - ((t + 1) * (t + 2) / 2), w)];
+        Integer[][] lookupTable = {
+            {0, 36, 3, 105, 210},
+            {1, 300, 10, 45, 66},
+            {190, 6, 171, 15, 253},
+            {28, 55, 153, 21, 120},
+            {91, 276, 231, 136, 78}
+        };
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                int shift = lookupTable[i][j];
+                for (int k = 0; k < w; k++) {
+                    newState[i][j][k] = stateArray[i][j][Math.floorMod(k - shift, w)];
+                }
             }
         }
-    
         return newState;
     }
     public static Integer [][][] pi (Integer [][][] stateArray) {
