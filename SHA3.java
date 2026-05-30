@@ -28,6 +28,7 @@ public class SHA3 {
     }
     public static Integer [][][] theta (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
+        Integer[][][] newState = new Integer[5][5][w];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
@@ -37,11 +38,11 @@ public class SHA3 {
                         parity1 = (parity1 + stateArray[m][Math.floorMod(j - 1, 5)][k]) % 2;
                         parity2 = (parity2 + stateArray[m][Math.floorMod(j + 1, 5)][Math.floorMod(k - 1, w)]) % 2;
                     }
-                    stateArray[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
+                    newState[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
                 }
             }
         }
-        return stateArray;
+        return newState;
     }
     public static Integer [][][] rho (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
