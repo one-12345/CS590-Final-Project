@@ -36,48 +36,48 @@ public class SHA3 {
         }
         return str;
     }
-    // public static Integer [][][] theta (Integer [][][] stateArray) {
-    //     int w = stateArray[0][0].length; // word size
-    //     Integer[][][] newState = new Integer[5][5][w];
-    //     for (int i = 0; i < 5; i++) {
-    //         for (int j = 0; j < 5; j++) {
-    //             for (int k = 0; k < w; k++) {
-    //                 int parity1 = 0;
-    //                 int parity2 = 0;
-    //                 for (int m = 0; m < 5; m++) {
-    //                     parity1 = parity1 ^ stateArray[m][Math.floorMod(j - 1, 5)][k];
-    //                     parity2 = parity2 ^ stateArray[m][Math.floorMod(j + 1, 5)][Math.floorMod(k - 1, w)];
-    //                 }
-    //                 newState[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
-    //             }
-    //         }
-    //     }
-    //     return newState;
-    // }
     public static Integer [][][] theta (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
         Integer[][][] newState = new Integer[5][5][w];
-        Integer[][] C = new Integer[5][w];
-        for (int i = 0; i < 5; i++) {
-            for (int k = 0; k < w; k++) {
-                C[i][k] = stateArray[i][0][k] ^ stateArray[i][1][k] ^ stateArray[i][2][k] ^ stateArray[i][3][k] ^ stateArray[i][4][k];
-            }
-        }
-        Integer[][] D = new Integer[5][w];
-        for (int i = 0; i < 5; i++) {
-            for (int k = 0; k < w; k++) {
-                D[i][k] = C[Math.floorMod(i - 1, 5)][k] ^ C[Math.floorMod(i + 1, 5)][Math.floorMod(k - 1, w)];
-            }
-        }
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
-                    newState[i][j][k] = stateArray[i][j][k] ^ D[i][k];
+                    int parity1 = 0;
+                    int parity2 = 0;
+                    for (int m = 0; m < 5; m++) {
+                        parity1 = parity1 ^ stateArray[m][Math.floorMod(j - 1, 5)][k];
+                        parity2 = parity2 ^ stateArray[m][Math.floorMod(j + 1, 5)][Math.floorMod(k - 1, w)];
+                    }
+                    newState[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
                 }
             }
         }
         return newState;
     }
+    // public static Integer [][][] theta (Integer [][][] stateArray) {
+    //     int w = stateArray[0][0].length; // word size
+    //     Integer[][][] newState = new Integer[5][5][w];
+    //     Integer[][] C = new Integer[5][w];
+    //     for (int i = 0; i < 5; i++) {
+    //         for (int k = 0; k < w; k++) {
+    //             C[i][k] = stateArray[i][0][k] ^ stateArray[i][1][k] ^ stateArray[i][2][k] ^ stateArray[i][3][k] ^ stateArray[i][4][k];
+    //         }
+    //     }
+    //     Integer[][] D = new Integer[5][w];
+    //     for (int i = 0; i < 5; i++) {
+    //         for (int k = 0; k < w; k++) {
+    //             D[i][k] = C[Math.floorMod(i - 1, 5)][k] ^ C[Math.floorMod(i + 1, 5)][Math.floorMod(k - 1, w)];
+    //         }
+    //     }
+    //     for (int i = 0; i < 5; i++) {
+    //         for (int j = 0; j < 5; j++) {
+    //             for (int k = 0; k < w; k++) {
+    //                 newState[i][j][k] = stateArray[i][j][k] ^ D[i][k];
+    //             }
+    //         }
+    //     }
+    //     return newState;
+    // }
     public static Integer [][][] rho (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
         Integer[][][] newState = new Integer[5][5][w]; 
