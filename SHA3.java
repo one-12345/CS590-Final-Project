@@ -1,6 +1,5 @@
 import java.util.*;
 import java.io.*;
-import java.math.BigInteger;
 
 public class SHA3 {
     public static String toHex(String binary) {
@@ -143,27 +142,15 @@ public class SHA3 {
         return toString(stateArray);
     }
     public static String pad (String message, int r) {
-        // pad the message with 100...001 until the length is a multiple of r
-        if (message.length() % r == 0) {
-            message = message + "1";
-            for (int i = 1; i < r - 1; i++) {
-                message = message + "0";
-            }
-            message = message + "1";
-            return message;
-        }
-        else if (message.length() % r == r - 1) {
-            message = message + "1";
-            for (int i = 0; i < r - 1; i++) {
-                message = message + "0";
-            }
-            message = message + "1";
+        // pad the message with the SHA3 suffix and 10*1 padding until the length is a multiple of r
+        if (message.length() % r == r - 1) {
+            message = message + "1101";
             return message;
         }
         else {
             int paddingLength = r - (message.length() % r);
-            String padding = "1";
-            for (int i = 1; i < paddingLength - 1; i++) {
+            String padding = "011";
+            for (int i = 3; i < paddingLength - 1; i++) {
                 padding = padding + "0";
             }
             padding = padding + "1";
