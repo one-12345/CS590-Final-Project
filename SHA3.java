@@ -32,7 +32,7 @@ public class SHA3 {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < arr[0][0].length; k++) {
-                    str = arr[i][j][k] + str;
+                    str = str + arr[i][j][k];
                 }
             }
         }
