@@ -14,6 +14,19 @@ public class SHA3 {
         }
         return hex;
     }
+    public static String toHexReversed(String binary) {
+        String hex = "";
+        while (binary.length() % 4 != 0) {
+            binary += "0";
+        }
+        for (int i = 0; i < binary.length(); i += 4) {
+            String fourBits = binary.substring(i, i + 4);
+            fourBits = new StringBuilder(fourBits).reverse().toString();
+            int decimalValue = Integer.parseInt(fourBits, 2);
+            hex = hex + Integer.toHexString(decimalValue);
+        }
+        return hex;
+    }
     public static String toString(Integer [][][] arr) {
         String str = "";
         for (int i = 0; i < 5; i++) {
@@ -34,8 +47,8 @@ public class SHA3 {
                     int parity1 = 0;
                     int parity2 = 0;
                     for (int m = 0; m < 5; m++) {
-                        parity1 = (parity1 + stateArray[m][Math.floorMod(j - 1, 5)][k]) % 2;
-                        parity2 = (parity2 + stateArray[m][Math.floorMod(j + 1, 5)][Math.floorMod(k - 1, w)]) % 2;
+                        parity1 = parity1 ^ stateArray[m][Math.floorMod(j - 1, 5)][k];
+                        parity2 = parity2 ^ stateArray[m][Math.floorMod(j + 1, 5)][Math.floorMod(k - 1, w)];
                     }
                     newState[i][j][k] = stateArray[i][j][k] ^ parity1 ^ parity2;
                 }
@@ -230,11 +243,9 @@ public class SHA3 {
         String state = absorb(message, b, c, r, w);
         String hashBinary = squeeze(state, d, r, w);
 
-        // BigInteger decimalString = new BigInteger(hashBinary, 2);
-        // String hashHex = decimalString.toString(16);
-
         FileWriter writer = new FileWriter("output.txt");
-        writer.write(toHex(hashBinary));
+        writer.write(toHex(hashBinary) + "\n");
+        writer.write(toHexReversed(hashBinary));
         writer.close();
 
         // for testing:
