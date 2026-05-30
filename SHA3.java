@@ -165,7 +165,21 @@ public class SHA3 {
             padding = padding + "0";
         }
         padding = padding + "1";
+        System.out.println(message + padding);
         return message + padding;
+    }
+    public static String toBinary (String text) {
+        // convert each character to 8-bit binary representation
+        String binary = "";
+        for (int i = 0; i < text.length(); i++) {
+            int c = text.charAt(i);
+            String byte_ = "";
+            for (int b = 0; b < 8; b++) {
+                byte_ = byte_ + ((c >> b) & 1);
+            }
+            binary = binary + byte_;
+        }
+        return binary;
     }
     public static String absorb (String message, int b, int c, int r, int w) {
         // split the message into n r-bit blocks
@@ -236,6 +250,7 @@ public class SHA3 {
         int c = d * 2; // capacity (the number of bits of the state that are not directly affected by the input, this determines the security level)
         int r = b - c; // rate (the number of bits of the state that are absorbed from the input per round)
 
+        message = toBinary(message);
         message = pad(message, r);
         String state = absorb(message, b, c, r, w);
         String hashBinary = squeeze(state, d, r, w);
