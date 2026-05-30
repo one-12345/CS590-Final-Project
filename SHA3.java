@@ -50,19 +50,21 @@ public class SHA3 {
         int i = 0;
         int j = 1;
         for (int k = 0; k < w; k++) {
+            newState[0][0][k] = stateArray[0][0][k];
             newState[i][j][k] = stateArray[i][j][Math.floorMod(k - (1 * 2) / 2, w)];
         }
-        stateArray = newState;
+        
         for (int t = 1; t < 24; t++) {
             int newI = Math.floorMod((3 * i) + (2 * j), 5);
             int newJ = i;
-            for (int k = 0; k < w; k++) {
-                newState[newI][newJ][k] = stateArray[i][j][Math.floorMod(k - (t + 1) * (t + 2) / 2, w)];
-            }
-            stateArray = newState;
             i = newI;
             j = newJ;
+    
+            for (int k = 0; k < w; k++) {
+                newState[i][j][k] = stateArray[i][j][Math.floorMod(k - ((t + 1) * (t + 2) / 2), w)];
+            }
         }
+    
         return newState;
     }
     public static Integer [][][] pi (Integer [][][] stateArray) {
