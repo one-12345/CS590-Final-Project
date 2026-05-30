@@ -121,7 +121,7 @@ public class SHA3 {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
-                    newState[i][j][k] = stateArray[i][j][k] ^ (~stateArray[i][Math.floorMod(j + 1, 5)][k] & stateArray[i][Math.floorMod(j + 2, 5)][k]);
+                    newState[i][j][k] = stateArray[i][j][k] ^ ((1 - stateArray[i][Math.floorMod(j + 1, 5)][k]) & stateArray[i][Math.floorMod(j + 2, 5)][k]);
                 }
             }
         }
