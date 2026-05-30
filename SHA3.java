@@ -80,15 +80,17 @@ public class SHA3 {
     }
     public static Integer [][][] chi (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
+        Integer[][][] newState = new Integer[5][5][w];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k < w; k++) {
-                    stateArray[i][j][k] = stateArray[i][j][k] ^ (~stateArray[i][Math.floorMod(j + 1, 5)][k] & stateArray[i][Math.floorMod(j + 2, 5)][k]);
+                    newState[i][j][k] = stateArray[i][j][k] ^ (~stateArray[i][Math.floorMod(j + 1, 5)][k] & stateArray[i][Math.floorMod(j + 2, 5)][k]);
                 }
             }
         }
-        return stateArray;
+        return newState;
     }
+    
     public static Integer [][][] iota (Integer [][][] stateArray, int i) {
         // round constants for Keccak-f[1600]
         long[] RC = {
