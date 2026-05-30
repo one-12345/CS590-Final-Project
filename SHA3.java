@@ -278,8 +278,8 @@ public class SHA3 {
         String hashBinary = squeeze(state, d, r, w);
 
         FileWriter writer = new FileWriter("output.txt");
-        writer.write(toHex(hashBinary) + "\n");
-        writer.write(toHexReversed(hashBinary));
+        writer.write(toHex(hashBinary));
+        // writer.write(toHexReversed(hashBinary));
         writer.close();
 
         // for testing:
