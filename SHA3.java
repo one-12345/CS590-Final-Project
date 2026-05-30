@@ -4,13 +4,11 @@ import java.io.*;
 public class SHA3 {
     public static String toHex(String binary) {
         String hex = "";
-        while (binary.length() % 4 != 0) {
-            binary = "0" + binary;
-        }
-        for (int i = 0; i < binary.length(); i += 4) {
-            String fourBits = binary.substring(i, i + 4);
-            int decimalValue = Integer.parseInt(fourBits, 2);
-            hex = hex + Integer.toHexString(decimalValue);
+        for (int i = 0; i < binary.length(); i += 8) {
+            String byte_ = binary.substring(i, i + 8);
+            String reversed = new StringBuilder(byte_).reverse().toString();
+            int decimalValue = Integer.parseInt(reversed, 2);
+            hex = hex + String.format("%02x", decimalValue);
         }
         return hex;
     }
