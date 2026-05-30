@@ -156,19 +156,16 @@ public class SHA3 {
     }
     public static String pad (String message, int r) {
         // pad the message with the SHA3 suffix and 10*1 padding until the length is a multiple of r
-        if (message.length() % r == r - 1) {
-            message = message + "1101";
-            return message;
+        int paddingLength = r - (message.length() % r);
+        if (paddingLength < 4) {
+            paddingLength = paddingLength + r;
         }
-        else {
-            int paddingLength = r - (message.length() % r);
-            String padding = "011";
-            for (int i = 3; i < paddingLength - 1; i++) {
-                padding = padding + "0";
-            }
-            padding = padding + "1";
-            return message + padding;
+        String padding = "011";
+        for (int i = 3; i < paddingLength - 1; i++) {
+            padding = padding + "0";
         }
+        padding = padding + "1";
+        return message + padding;
     }
     public static String absorb (String message, int b, int c, int r, int w) {
         // split the message into n r-bit blocks
