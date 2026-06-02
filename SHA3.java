@@ -54,30 +54,6 @@ public class SHA3 {
         }
         return newState;
     }
-    // public static Integer [][][] theta (Integer [][][] stateArray) {
-    //     int w = stateArray[0][0].length; // word size
-    //     Integer[][][] newState = new Integer[5][5][w];
-    //     Integer[][] C = new Integer[5][w];
-    //     for (int i = 0; i < 5; i++) {
-    //         for (int k = 0; k < w; k++) {
-    //             C[i][k] = stateArray[i][0][k] ^ stateArray[i][1][k] ^ stateArray[i][2][k] ^ stateArray[i][3][k] ^ stateArray[i][4][k];
-    //         }
-    //     }
-    //     Integer[][] D = new Integer[5][w];
-    //     for (int i = 0; i < 5; i++) {
-    //         for (int k = 0; k < w; k++) {
-    //             D[i][k] = C[Math.floorMod(i - 1, 5)][k] ^ C[Math.floorMod(i + 1, 5)][Math.floorMod(k - 1, w)];
-    //         }
-    //     }
-    //     for (int i = 0; i < 5; i++) {
-    //         for (int j = 0; j < 5; j++) {
-    //             for (int k = 0; k < w; k++) {
-    //                 newState[i][j][k] = stateArray[i][j][k] ^ D[i][k];
-    //             }
-    //         }
-    //     }
-    //     return newState;
-    // }
     public static Integer [][][] rho (Integer [][][] stateArray) {
         int w = stateArray[0][0].length; // word size
         Integer[][][] newState = new Integer[5][5][w]; 
@@ -187,7 +163,7 @@ public class SHA3 {
             padding = padding + "0";
         }
         padding = padding + "1";
-        System.out.println(message + padding);
+        // System.out.println(message + padding);
         return message + padding;
     }
     public static String toBinary (String text) {
@@ -263,7 +239,7 @@ public class SHA3 {
         Scanner scan = new Scanner(new FileReader(filename));
         String message = "";
         if (scan.hasNextLine()) {
-            message = scan.nextLine(); // a bit string to be hashed
+            message = scan.nextLine(); // a string to be hashed
         }
 
         int b = 1600; // state size (in standard SHA-3, the state is a 1600-bit array composed of a 5x5 grid of 64-bit words)
